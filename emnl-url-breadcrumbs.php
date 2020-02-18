@@ -2,9 +2,9 @@
 /**
  * Plugin Name: URL Breadcrumbs
  * Description: This plugin creates breadcrumbs where its items are based on the current URL structure (and NOT based on permalinks, e.g. like Yoast SEO does). It does two things: 1) Adds schema.org breadcrumbs to the <head> for search engines, and 2) Creates the function emnl_breadcrumbs() which you can use in your theme templates to output visual breadcrumbs to the user.
- * Version: 	2.0
- * Author: 		Erik Molenaar
- * Author URI: 	https://www.erikmolenaar.nl
+ * Version:     2.0
+ * Author:      Erik Molenaar
+ * Author URI:  https://www.erikmolenaar.nl
  */
 
 
