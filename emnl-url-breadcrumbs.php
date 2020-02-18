@@ -1,22 +1,42 @@
 <?php
-/*
-Plugin Name: URL Breadcrumbs
-Description: This plugin creates breadcrumbs where its items are based on the current URL structure (and NOT based on permalinks, e.g. like Yoast SEO does). It does two things: 1) Adds schema.org breadcrumbs to the <head> for search engines, and 2) Creates the function emnl_breadcrumbs() which you can use in your theme templates to output visual breadcrumbs to the user.
-Version: 2.0
-Author: Erik Molenaar
-Author URI: https://www.erikmolenaar.nl
-*/
+/**
+ * Plugin Name: URL Breadcrumbs
+ * Description: This plugin creates breadcrumbs where its items are based on the current URL structure (and NOT based on permalinks, e.g. like Yoast SEO does). It does two things: 1) Adds schema.org breadcrumbs to the <head> for search engines, and 2) Creates the function emnl_breadcrumbs() which you can use in your theme templates to output visual breadcrumbs to the user.
+ * Version: 	2.0
+ * Author: 		Erik Molenaar
+ * Author URI: 	https://www.erikmolenaar.nl
+ */
+
 
 // Exit if accessed directly
 if ( ! defined ( 'ABSPATH' ) ) exit;
 
+/**
+ * This class checks conditions for, and returns breadcrumbs at the proper locations.
+ */
 class EMNL_URL_Breadcrumbs {
 
-	public function __construct() {
+	/**
+	* Holds class instance.
+	*/
+	private static $instance;
+
+	/**
+	 * Property holding the url array.
+	 * @var array
+	 */
+	private $url_array;
+
+	/**
+	 * Class constructor.
+	 */
+	private function __construct() {
 		add_action ( 'wp_head', array ( $this, 'check_conditions_and_return_schema_and_html' ), 99 );
     }
 
-	// Function checking conditions and returns all breadcrumbs at the proper locations
+	/**
+	 * Checks conditions and returns all breadcrumbs at the proper locations.
+	 */
 	public function check_conditions_and_return_schema_and_html() {
 
 		// Only work in Categories, Tags, single Posts and the Page containing Cisco Course Categories
@@ -36,8 +56,10 @@ class EMNL_URL_Breadcrumbs {
 
 	}
 
-	// Function which returns breadcrumbs in schema <script>
-	private function return_breadcrumbs_schema () {
+	/**
+	 * Returns breadcrumbs in schema <script>.
+	 */
+	private function return_breadcrumbs_schema() {
 
 		// Open JSON-LD snippet 
 		$snippet = 
@@ -85,8 +107,10 @@ class EMNL_URL_Breadcrumbs {
 
 	}
 
-	// Function which returns breadcrumbs in <div>
-	public function return_breadcrumbs_html () {
+	/**
+	 * Returns breadcrumbs visible to user in <div>.
+	 */
+	public function return_breadcrumbs_html() {
 
 		// Start of breadcrumbs sentence
 		$sentence = 'You are here: ';
@@ -130,7 +154,10 @@ class EMNL_URL_Breadcrumbs {
 
 	}
 
-	// Funtion which returns array of all URL breadcrumbs (together with 'type', 'name', 'url' and 'active')
+	/**
+	 * Returns array of all URL breadcrumbs (together with 'type', 'name', 'url' and 'active').
+	 * @return array $breadcrumbs_all
+	 */
 	private function create_breadcrumbs_array_from_url() {
 
 		// Get URL and place all slugs in an array
@@ -221,10 +248,17 @@ class EMNL_URL_Breadcrumbs {
 
 	}
 
+	/**
+	* Get class instance.
+	*/
+	public static function get_instance(){
+		if ( null === self::$instance ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
 }
 
-// If you need this available beyond our initial creation, you can create it as a global
-// global $emnl_url_breadcrumbs;
-
 // Create an instance of our class to kick off the whole thing
-$emnl_url_breadcrumbs = new EMNL_URL_Breadcrumbs();
+$emnl_url_breadcrumbs = EMNL_URL_Breadcrumbs::get_instance();
